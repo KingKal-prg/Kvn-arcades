@@ -1,83 +1,258 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-
-    <title>Rammerhead Proxy</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kelvin's Arcade Proxy</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <!-- Optional: Bootstrap is included for quick layout but we override to match our style -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+        crossorigin="anonymous">
+  <!-- FontAwesome for icons (if needed) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+  <!-- Your custom CSS (for any additional overrides) -->
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Global resets */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    /* Dark gradient background */
+    html,
+    body {
+      height: 100%;
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(135deg, #121212, #1f1f1f);
+      color: #fff;
+      overflow: hidden;
+    }
+    /* Fullscreen particle background */
+    #particles-js {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: -1;
+    }
+    /* Centered content card */
+    #content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 500px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.65);
+    }
+    /* Header styling */
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    header img {
+      max-width: 100px;
+      margin-bottom: 10px;
+    }
+    header h1 {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+    /* Custom input style (replacing Bootstrap defaults) */
+    .custom-input {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 50px;
+      background: #1e1e1e;
+      color: #fff;
+      text-align: center;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .custom-input:focus {
+      outline: none;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      transform: scale(1.01);
+    }
+    /* Custom button style */
+    .custom-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 50px;
+      background-color: #ff5722;
+      color: #fff;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+    .custom-btn:hover {
+      background-color: #e64a19;
+    }
+    /* Hide any unwanted default banners injected by Rammerhead */
+    .rh-banner {
+      display: none !important;
+    }
+    /* Optional: Style for the advanced options toggle (using a Bootstrap override here) */
+    #session-advanced-toggle {
+      background: none;
+      border: 1px solid #ff5722;
+      color: #ff5722;
+      border-radius: 50px;
+      padding: 8px;
+      font-size: 14px;
+      margin-top: 15px;
+    }
+    #session-advanced-toggle:hover {
+      background: #ff5722;
+      color: #fff;
+    }
+  </style>
+  <!-- Include Rammerhead functionality -->
+  <script src="script.js"></script>
 </head>
-
 <body>
+  <!-- Particle background container -->
+  <div id="particles-js"></div>
+  
+  <!-- Main content card containing Rammerhead elements -->
+  <div id="content">
     <header>
-        <img src="logo.png" />
-        <h1>Rammerhead Proxy</h1>
+      <!-- Replace logo.png with your logo asset -->
+      <img src="logo.png" alt="Logo" />
+      <h1>Kelvin's Arcade Proxy</h1>
     </header>
-    <div class="container mb-5">
-        <p class="mt-3 mb-3 font-weight">Join the <a href="https://discord.gg/VNT4E7gN5Y">Discord server</a> for updates
-            or just chat about life</p>
-        <p class="mb-0 font-weight-bold">Notice: inactive sessions will be deleted after 3 days.</p>
-        <p class="mb-3 font-weight-bold">Notice 2: Treat every session id like an isolated incognito browser that
-            belongs only to you. DO NOT SHARE THE SESSION ID. All logins that you make with the session id will be saved
-            in that session. Anyone that has your session id or session url CAN ACCESS your logged in sites.</p>
-        <p class="mb-3 font-weight-bold text-danger" id="error-text" style="display: none">Error: some text</p>
-        <div class="input-group mb-2" id="password-wrapper" style="display: none">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Enter password</span>
-            </div>
-            <input type="password" class="form-control" id="session-password"
-                placeholder="Password is given by host of this site.">
+    <div class="container">
+      <p class="mb-3 text-center">Join our <a href="https://discord.gg/VNT4E7gN5Y" style="color: #ff5722;">Discord server</a> for updates.</p>
+      <p class="mb-3 text-center">Notice: inactive sessions will be deleted after 3 days.</p>
+      <p class="mb-3 text-center">Treat every session as an isolated incognito browser – do not share your session ID.</p>
+      
+      <!-- URL input and Go button -->
+      <input type="text" class="custom-input" id="session-url" placeholder="Enter URL (e.g., https://www.google.com/)" />
+      <button class="custom-btn" id="session-go">Go!</button>
+      
+      <br /><br />
+      
+      <!-- Session ID and Create Session button -->
+      <input readonly type="text" class="custom-input" id="session-id" placeholder="Session ID will appear here" />
+      <button class="custom-btn" id="session-create-btn">Create new session ID</button>
+      
+      <!-- Toggle for advanced options -->
+      <button class="custom-btn" id="session-advanced-toggle" type="button">Show advanced options</button>
+      
+      <!-- Advanced session options -->
+      <div id="session-advanced-container" style="display: none; margin-top: 15px;">
+        <div class="form-check mb-1 text-center">
+          <input class="form-check-input" type="checkbox" value="" id="session-shuffling" checked>
+          <label class="form-check-label" for="session-shuffling">Enable URL Shuffling</label>
         </div>
-        <div class="input-group mb-2">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Enter URL</span>
-            </div>
-            <input type="text" class="form-control" id="session-url" placeholder="https://www.google.com/">
-            <div class="input-group-append">
-                <button class="btn btn-success" id="session-go">Go!</button>
-            </div>
-        </div>
-        <div class="input-group mb-4">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Session ID</span>
-            </div>
-            <input readonly type="text" class="form-control disable-text" id="session-id"
-                placeholder="click on 'Create new session ID' or 'Fill in existing session ID' from below">
-            <div class="input-group-append">
-                <button class="btn btn-secondary" id="session-create-btn" type="button">Create new session ID</button>
-            </div>
-        </div>
-        <button class="btn btn-outline-secondary" id="session-advanced-toggle">Show advanced options</button>
-        <div class="mt-2 mb-4" id="session-advanced-container" style="display: none">
-            <div class="form-check mb-1">
-                <input class="form-check-input" type="checkbox" value="" id="session-shuffling" checked>
-                <label class="form-check-label" for="session-shuffling">Enable URL Shuffling</label>
-            </div>
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">HTTP Proxy</span>
-                </div>
-                <input type="text" class="form-control" id="session-httpproxy"
-                    placeholder="http://username:password@proxyipaddress:proxyport">
-            </div>
-        </div>
+        <input type="text" class="custom-input" id="session-httpproxy" placeholder="HTTP Proxy (optional, e.g., http://username:password@ip:port)" />
+      </div>
     </div>
-    <div class="row justify-content-center m-0">
-        <table class="table w-75 table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>Session ID</th>
-                    <th>Created on</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
+  </div>
+  
+  <!-- Load particles.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    // Initialize particles for the background
+    window.onload = function () {
+      particlesJS("particles-js", {
+        "particles": {
+          "number": {
+            "value": 120,
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": { "value": "#ffffff" },
+          "shape": {
+            "type": "circle",
+            "stroke": { "width": 0, "color": "#000000" },
+            "polygon": { "nb_sides": 5 }
+          },
+          "opacity": {
+            "value": 0.6,
+            "random": false,
+            "anim": {
+              "enable": false,
+              "speed": 1,
+              "opacity_min": 0.1,
+              "sync": false
+            }
+          },
+          "size": {
+            "value": 3,
+            "random": true,
+            "anim": {
+              "enable": false,
+              "speed": 40,
+              "size_min": 0.1,
+              "sync": false
+            }
+          },
+          "line_linked": {
+            "enable": true,
+            "distance": 150,
+            "color": "#ffffff",
+            "opacity": 0.4,
+            "width": 1
+          },
+          "move": {
+            "enable": true,
+            "speed": 3,
+            "direction": "none",
+            "random": true,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false,
+            "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 }
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": { "enable": true, "mode": "grab" },
+            "onclick": { "enable": true, "mode": "push" },
+            "resize": true
+          },
+          "modes": {
+            "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
+            "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+            "repulse": { "distance": 200, "duration": 0.4 },
+            "push": { "particles_nb": 4 },
+            "remove": { "particles_nb": 2 }
+          }
+        },
+        "retina_detect": true
+      });
+    };
+    
+    // Example JavaScript to toggle advanced options (if not already handled by script.js)
+    document.addEventListener("DOMContentLoaded", function() {
+      const advToggle = document.getElementById('session-advanced-toggle');
+      const advContainer = document.getElementById('session-advanced-container');
+      advToggle.addEventListener('click', function() {
+        if (advContainer.style.display === "none") {
+          advContainer.style.display = "block";
+          advToggle.textContent = "Hide advanced options";
+        } else {
+          advContainer.style.display = "none";
+          advToggle.textContent = "Show advanced options";
+        }
+      });
+    });
+  </script>
 </body>
-
 </html>

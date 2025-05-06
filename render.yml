@@ -1,0 +1,11 @@
+services:
+  - name: Kelvin's Arcade
+    type: web
+    env: node
+    buildCommand: "npm install && npm run build"
+    startCommand: "node server.js"
+    envVars:
+      - key: PORT
+        value: 8080
+    plan: free
+    rootDir: rammerhead
